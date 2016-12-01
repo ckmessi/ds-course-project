@@ -23,7 +23,7 @@
             }
 
             .full-height {
-                height: 50vh;
+                height: 10vh;
             }
 
             .flex-center {
@@ -53,7 +53,7 @@
             .links > a {
                 color: #636b6f;
                 padding: 0 25px;
-                font-size: 12px;
+                font-size: 18px;
                 font-weight: 600;
                 letter-spacing: .1rem;
                 text-decoration: none;
@@ -66,16 +66,33 @@
         </style>
     </head>
     <body>
+
         <div class="flex-center position-ref full-height">
-            <div class="content">
-                <div class="title m-b-md">
-                    Evaluate
-                </div>                
-            </div>
+                <div class="top-right links">
+                @if (Session::has('user_id'))
+                    <a href="{{ url('/logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                    Logout</a>
+                    <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
+                        {{ csrf_field() }}
+                    </form>
+                @endif
+                </div>
         </div>
+       
         <div class="container">
+            <div class="page-header">
+              <h1>Hello, {{ $user_name or '未知用户'}}</h1>
+            </div>
+            
             <div class="row">
-                <div class="col-md-6 col-md-offset-3">
+                <div class="col-md-8 col-md-offset-2">
+                    @if (Session::has('message_success'))
+                    <div class="alert alert-success alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        {{ Session::get('message_success') }}
+                    </div>
+                    @endif
+
                     @if (Session::has('message_failed'))
                     <div class="alert alert-danger alert-dismissible" role="alert">
                         <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
@@ -84,15 +101,28 @@
                     @endif
                 </div>
             </div>
-            <div class="row">
+                <div class="row">
                 <div class="col-md-6 col-md-offset-3">
-                    <form role="form" action="/login" method="POST">
-                        {{ csrf_field() }}
-                        <div class="form-group">
-                            <input type="key" class="form-control" id="key_input" name="dsproject_key" placeholder="Enter Key">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">实验1</div>
+                        <div class="panel-body">
+                            @if (isset($grade_project1))
+                                <h3> {{ $grade_project1['grade_point'] }} </h3>
+                                <p> {{ $grade_project1['grade_comment'] }} </p>
+                                
+                                @if ( $grade_project1['grade_confirm'] == true )
+                                    <h4 style="float:right"> 您已确认 </h4>
+                                @else
+                                    <button type="button" class="btn btn-success" style="float:right" onclick="event.preventDefault();document.getElementById('comfirm-project1-form').submit();">确认无误</button>
+                                    <form id="comfirm-project1-form" action="{{ url('/confirm') }}" method="POST" style="display: none;">
+                                            {{ csrf_field() }}
+                                    </form>
+                                @endif
+                            @else
+                                您的分数信息为空，请联系助教。
+                            @endif
                         </div>
-                        <button type="submit" class="btn btn-default" style="float:right;">Submit</button>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
