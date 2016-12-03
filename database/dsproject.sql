@@ -16,7 +16,7 @@ CREATE TABLE dsproject_grade_project1(
 	user_id int COMMENT "用户ID",
 	grade_point int COMMENT "分数",
 	grade_comment varchar(1024) COMMENT "分数注释",
-	grade_confirm boolean DEFAULT FALSE COMMENT "是否确认"
+	grade_confirm boolean DEFAULT FALSE COMMENT "是否确认",
 	PRIMARY KEY(user_id)
 )DEFAULT CHARSET=utf8;
 
