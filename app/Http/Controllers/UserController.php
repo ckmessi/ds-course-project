@@ -83,11 +83,17 @@ class UserController extends Controller
     }
 
     public function showList(Request $request){
-         if ($request->session()->has('user_id') == false){
+        if ($request->session()->has('user_id') == false){
             return redirect('/');
         }
+        $user_id = $request->session()->get('user_id');
+        $user_base = User::where(['user_id' => $user_id])->first();
+        if($user_base['user_role'] == 0){
+            return redirect('/home');
+        }
+
         $project1_list = GradeProject1::join('user', 'user.user_id', '=', 'grade_project1.user_id')->get();
-        return view('list', ['project1_list' => $project1_list]);
+        return view('list', ['project1_list' => $project1_list, 'user_name' => $user_base['user_name']]);
     }
 
 

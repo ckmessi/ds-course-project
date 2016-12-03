@@ -46,10 +46,10 @@ class ImportGrade extends Command
         $file_path = 'storage/app/public/project1.xls';
         Excel::load($file_path, function($reader) {
             // Select
-            $reader = $reader->getSheet(0);//excel第一张sheet
+            $reader = $reader->getSheet(1);//excel第一张sheet
             $results = $reader->toArray();
             $student_list = array();
-            for($i = 4; $i < count($results); $i++){
+            for($i = 3; $i < count($results); $i++){
                 $row = $results[$i];
                 $student = array();
                 $student['student_id'] = $row[1];
@@ -87,18 +87,17 @@ class ImportGrade extends Command
                 else{
                     $user_id = $user_base['user_id'];
                 }
+                 // insert to grade_project1
+                $grade_project1_data = array();
+                $grade_project1_data['user_id'] = $user_id;
+                $grade_project1_data['grade_point'] = $student['grade_point'];
+                $grade_project1_data['grade_comment'] = $student['grade_comment'];
+                $res = GradeProject1::insert($grade_project1_data);
+                if($res == false){
+                    $this->warn($student_id . " create project1 grade failed");
+                }
             }
-
-            // insert to grade_project1
-            $grade_project1_data = array();
-            $grade_project1_data['user_id'] = $user_id;
-            $grade_project1_data['grade_point'] = $student['grade_point'];
-            $grade_project1_data['grade_comment'] = $student['grade_comment'];
-            $res = GradeProject1::insert($grade_project1_data);
-            if($res == false){
-                $this->warn($student_id . " create project1 grade failed");
-            }
-
+          
         });
 
         $this->info('finish import student information.');

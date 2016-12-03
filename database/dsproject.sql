@@ -3,6 +3,7 @@ CREATE TABLE dsproject_user(
 	student_id varchar(16) COMMENT "学号",
 	user_name varchar(16) COMMENT "姓名",
 	dsproject_key varchar(64) COMMENT "数据结构实验密钥",
+	user_role int NOT NULL DEFAULT 0 COMMENT "用户角色：0学生；1管理员",
 	created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	updated_at timestamp NULL,
 	deleted_at timestamp NULL,
