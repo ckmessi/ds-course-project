@@ -56,6 +56,9 @@ class UserController extends Controller
         $user_id = $request->session()->get('user_id');
         // 用户
         $user_base = User::where(['user_id' => $user_id])->first();
+        if($user_base['user_role'] == 1){
+            return redirect('/list');
+        }
 
         // 查找成绩
         $grade_project1_base = GradeProject1::where(['user_id' => $user_id])->first();
