@@ -12,6 +12,10 @@
 */
 
 Route::get('/', function () {
+
+	if(session()->has('user_id')){
+		 return redirect('/home');
+	}
     return view('welcome');
 });
 

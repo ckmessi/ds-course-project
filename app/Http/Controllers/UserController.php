@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\GradeProject1;
+use App\LoginRecord;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -29,6 +30,14 @@ class UserController extends Controller
     	// record session and redirect to home
     	$request->session()->put('user_id', $user_base['user_id']);
     	$request->session()->flash('message_success', '登录成功！');
+
+        // record to database
+        $login_record = array();
+        $login_record['user_id'] = $user_base['user_id'];
+        $login_record['user_name'] = $user_base['user_name'];
+        $login_record['login_ip'] = $request->ip();
+        LoginRecord::insert($login_record);
+
 		return redirect('/home');	    
     }
 
